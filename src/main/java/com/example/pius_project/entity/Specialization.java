@@ -1,5 +1,6 @@
 package com.example.pius_project.entity;
 
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import jakarta.persistence.Id;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(name = "specialization", schema = "pius")
 public class Specialization {
     @Id
     String name;
