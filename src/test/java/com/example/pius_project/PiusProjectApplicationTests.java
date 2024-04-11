@@ -8,6 +8,7 @@ class PiusProjectApplicationTests {
 
     @Test
     void contextLoads() {
+        System.out.println("Hello");
     }
 
 }
