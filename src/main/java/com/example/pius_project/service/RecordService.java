@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -35,9 +37,9 @@ public class RecordService {
 
     public GetAvailableRecordsResponseBody getRecords(GetAvailableRecordsRequestBody
                                                                         getAvailableRecordsRequestBody){
-        ArrayList<Record> records = recordRepository.findByDate(
+        List<Record> records = recordRepository.findByDate(
                                                                 getAvailableRecordsRequestBody.getDoctorId(),
-                                                                getAvailableRecordsRequestBody.getIndexFrom()
+                                                                getAvailableRecordsRequestBody.getPageNum()
                                                                 );
         records.sort(Record.COMPARE_BY_TIME);
         Doctor doctor = doctorRepository.findById(getAvailableRecordsRequestBody.getDoctorId())
@@ -61,6 +63,16 @@ public class RecordService {
         Doctor doctor = doctorRepository.findById(body.getDoctorId()).orElseThrow(() -> new DoctorNotFoundException(body.getDoctorId()));
 
         Set<Record> doctorRecords = doctor.getRecords();
+        boolean isRecordInTheSet = false;
+        for (Record doctorRecord : doctorRecords) {
+            if (doctorRecord.getId() == record.getId()) {
+                isRecordInTheSet = true;
+                break;
+            }
+        }
+        if(!isRecordInTheSet){
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Doctor and record mismatch!");
+        }
         StoreRecordDto storeRecordDto = new StoreRecordDto(
                 body.getRecordId(),
                 body.getDoctorId(),
@@ -69,8 +81,10 @@ public class RecordService {
                 doctor.getSpecialization(),
                 doctor.getOrganization());
         storeRecordClient.storeRecord(storeRecordDto, userId);
+
         doctorRecords.remove(record);
         doctorRepository.save(doctor);
+        recordRepository.deleteById(record.getId());
     }
 
     public void restoreRecord(RestoreRecordRequestBody body){
@@ -85,13 +99,14 @@ public class RecordService {
             recordRepository.save(record);
             doctorRepository.save(doctor);
         } catch (DoctorNotFoundException e){
+            recordRepository.save(record);
             doctorRepository.save(new Doctor(
                     body.getDoctorId(),
                     body.getDoctorFIO(),
                     body.getOrganization(),
                     body.getSpecialization(),
                     Set.of(record)));
-            recordRepository.save(record);
+
         }
     }
 }

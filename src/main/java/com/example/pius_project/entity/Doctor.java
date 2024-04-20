@@ -22,7 +22,6 @@ import java.util.Set;
 @Table(name = "doctor", schema = "pius")
 public class Doctor {
     @Id
-    @GeneratedValue
     long id;
     String name;
     String organization;

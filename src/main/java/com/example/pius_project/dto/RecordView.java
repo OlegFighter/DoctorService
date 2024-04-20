@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import com.example.pius_project.entity.Record;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 
 @Getter
@@ -14,22 +15,15 @@ import java.util.Comparator;
 @NoArgsConstructor
 public class RecordView {
     long id;
-    String time;
+    LocalDateTime time;
 
-    public RecordView(String time) {
+    public RecordView(LocalDateTime time) {
         this.time = time;
     }
 
     public RecordView(Record record) {
-        /*this.id = record.getId();
-        String inserting = new String();
-        if(record.getTime().getMonth().getValue() < 10){
-            inserting = "0" + record.getTime().getMonth().getValue();
-        }else {
-            inserting = String.valueOf(record.getTime().getMonth().getValue());
-        }
-        this.time = record.getTime().getDayOfMonth() + "." + inserting + "." + record.getTime().getYear() + ", " + record.getTime().getHour() + ":" + record.getTime().getMinute();*/
-        this.time = record.getTime().toString();
+        this.id = record.getId();
+        this.time = record.getTime();
     }
 
     public static final Comparator<RecordView> COMPARE_BY_TIME = new Comparator<RecordView>() {
