@@ -1,3 +1,5 @@
+create schema pius;
+
 CREATE SEQUENCE IF NOT EXISTS pius.hibernate_sequence START WITH 1 INCREMENT BY 1;
 
 CREATE TABLE pius.doctor

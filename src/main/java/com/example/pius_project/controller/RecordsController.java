@@ -1,6 +1,8 @@
 package com.example.pius_project.controller;
 
 import com.example.pius_project.dto.CreateRecordRequestBody;
+import com.example.pius_project.dto.GetAvailableRecordsRequestBody;
+import com.example.pius_project.dto.GetAvailableRecordsResponseBody;
 import com.example.pius_project.dto.RestoreRecordRequestBody;
 import com.example.pius_project.dto.TestDto;
 import com.example.pius_project.service.RecordService;
@@ -26,11 +28,16 @@ public class RecordsController {
         recordService.createRecord(body, userId);
     }
 
-    @GetMapping("{message}")
-    public String test(@PathVariable String message, @RequestHeader(name = "user-id") long userId){
-        System.out.println("test request" + message);
-        return "OK";
+    @GetMapping
+    public GetAvailableRecordsResponseBody getRecords(@RequestBody GetAvailableRecordsRequestBody body, @RequestHeader(name = "user-id") long userId){
+        return recordService.getRecords(body);
     }
+
+//    @GetMapping("{message}")
+//    public String test(@PathVariable String message, @RequestHeader(name = "user-id") long userId){
+//        System.out.println("test request" + message);
+//        return "OK";
+//    }
 
     @PostMapping("/restore")
     public void restoreRecord(@RequestBody RestoreRecordRequestBody body){

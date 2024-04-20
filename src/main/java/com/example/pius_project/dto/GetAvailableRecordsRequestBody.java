@@ -15,5 +15,5 @@ import java.io.Serializable;
 @Setter
 public class GetAvailableRecordsRequestBody implements Serializable {
     long doctorId;
-    int indexFrom;
+    int pageNum;
 }

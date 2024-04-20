@@ -22,7 +22,6 @@ import java.util.Comparator;
 @Table(name = "record", schema = "pius")
 public class Record {
     @Id
-    @GeneratedValue
     long id;
     LocalDateTime time;
     @ManyToOne
@@ -40,7 +39,6 @@ public class Record {
     public static final Comparator<Record> COMPARE_BY_TIME = new Comparator<Record>() {
         @Override
         public int compare(Record o1, Record o2) {
-            int s = Integer.parseInt("${spring.datasource.password}");
             return o1.getTime().compareTo(o2.getTime());
         }
     };

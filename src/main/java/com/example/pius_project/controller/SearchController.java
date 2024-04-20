@@ -5,8 +5,8 @@ import com.example.pius_project.dto.SearchWithFiltersRequestBody;
 import com.example.pius_project.dto.SearchWithFiltersResponseBody;
 import com.example.pius_project.repository.OrganizationRepository;
 import com.example.pius_project.repository.SpecializationRepository;
+import com.example.pius_project.service.OrganizationAndSpecializationService;
 import com.example.pius_project.service.SearchService;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,14 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/doctors/search")
 public class SearchController {
     private final SearchService searchService;
-    private final OrganizationRepository organizationRepository;
-    private final SpecializationRepository specializationRepository;
+    private final OrganizationAndSpecializationService organizationAndSpecializationService;
 
-    public SearchController(SearchService searchService, OrganizationRepository organizationRepository,
-                            SpecializationRepository specializationRepository) {
+
+    public SearchController(SearchService searchService,
+                            OrganizationAndSpecializationService organizationAndSpecializationService) {
         this.searchService = searchService;
-        this.organizationRepository = organizationRepository;
-        this.specializationRepository = specializationRepository;
+        this.organizationAndSpecializationService = organizationAndSpecializationService;
     }
 
     @PostMapping
@@ -33,17 +32,18 @@ public class SearchController {
             @RequestBody SearchWithFiltersRequestBody body,
             @RequestHeader(name = "user-id") Long userId
             ){
-        System.out.println(userId);
         return searchService.searchWithFilters(body);
     }
 
+
+
     @GetMapping("/organizations")
     OrgAndSpecResponseBody allOrganizations(){
-        return new OrgAndSpecResponseBody(organizationRepository.findAllNames());
+        return organizationAndSpecializationService.allOrganizations();
     }
 
     @GetMapping("/specializations")
     OrgAndSpecResponseBody allSpecializations(){
-        return new OrgAndSpecResponseBody(specializationRepository.findAllNames());
+        return organizationAndSpecializationService.allSpecializations();
     }
 }

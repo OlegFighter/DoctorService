@@ -15,11 +15,9 @@ import java.util.List;
 @Service
 public class SearchService {
     private final DoctorRepository doctorRepository;
-    private final RecordRepository recordRepository;
 
-    public SearchService(DoctorRepository doctorRepository, RecordRepository recordRepository) {
+    public SearchService(DoctorRepository doctorRepository) {
         this.doctorRepository = doctorRepository;
-        this.recordRepository = recordRepository;
     }
 
     public SearchWithFiltersResponseBody searchWithFilters(SearchWithFiltersRequestBody body){
